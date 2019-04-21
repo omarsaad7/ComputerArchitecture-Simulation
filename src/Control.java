@@ -12,6 +12,7 @@ public class Control {
 		Register  MemWrite;
 		Register  ALUOp;
 		Register  ALUSrc;
+		Register  LS;
 	public Control() {
 		// TODO Auto-generated constructor stub
 		RegWrite=new Register("RegWrite", (1));
@@ -26,6 +27,7 @@ public class Control {
 		MemWrite=new Register("MemWrite", (1));
 		ALUOp=new Register("ALUOp", (4));
 		ALUSrc=new Register("ALUSrc", (1));
+		LS=new Register("LS", (1));
 	}
 
 }

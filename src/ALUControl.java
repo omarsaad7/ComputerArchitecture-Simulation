@@ -33,7 +33,7 @@ public class ALUControl {
 				ALUControlOutput = "0000";
 			}
 		}
-		if (OpCode.equals("0111")) {
+		if (OpCode.equals("0111")||OpCode.equals("0100")||OpCode.equals("0101")) {
 			ALUControlOutput = "0011";
 		}
 	}

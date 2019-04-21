@@ -29,6 +29,11 @@ public class Execute {
 			control.jumpReturn.setValue("1");
 		if(OpCode.equals("0011"))
 			control.jal.setValue("1");
+		if(OpCode.equals("0100"))
+			control.MemRead.setValue("1");
+		if(OpCode.equals("0101"))
+			control.MemWrite.setValue("1");
+		
 	}
 
 }
