@@ -1,7 +1,7 @@
 public class ALU  {
 	boolean zero;
 	boolean lessthan;
-	String ALUResult;
+	String ALUResult="0000000000000000";
 
 	public ALU(String ReadData1, String ReadData2, String ALUControl) {
 		// TODO Auto-generated constructor stub

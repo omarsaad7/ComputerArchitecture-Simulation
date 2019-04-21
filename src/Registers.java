@@ -2,9 +2,7 @@ public class Registers {
 
 	Register[] registers;
 
-	/**
-	 * Constructs a new 16-register file
-	 */
+	
 	public Registers() {
 		registers = new Register[16];
 		registers[0] = new Register("#PC", 16);

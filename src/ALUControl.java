@@ -1,5 +1,5 @@
 public class ALUControl {
-	String ALUControlOutput;
+	String ALUControlOutput="";
 
 	public ALUControl(String OpCode, String ALUOp) {
 		// TODO Auto-generated constructor stub
