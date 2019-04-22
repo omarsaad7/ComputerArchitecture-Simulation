@@ -10,38 +10,107 @@ import java.io.IOException;
 public class Stages {
 	static String pcc;
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+	// public static void main(String[] args) {
+	// // TODO Auto-generated method stub
+	//
+	// Registers registers = new Registers();
+	// InstructionMemory instructionMemory = new InstructionMemory(2500);
+	// Control control = new Control();
+	//
+	// // ////////////////////////JUST TO TEST///////////////////
+	// // registers.registers[3].setValue("0000000000000100");
+	// // registers.registers[4].setValue("0000000000000100");
+	// // ///////////////////////////////////////////////////////
+	//
+	//
+	// // Getting all instructions from txt file in Instruction Memory
+	// BufferedReader reader;
+	// try {
+	//
+	// reader = new BufferedReader(new FileReader("src/instructions.txt"));
+	// String line = reader.readLine();
+	// int index = Integer
+	// .parseInt(registers.getRegister(0).getValue(), 2);
+	// while (line != null) {
+	// instructionMemory.setInstruction(index, line);
+	// index += 2;
+	// // read next line
+	// line = reader.readLine();
+	// }
+	// // System.out.println(instructionMemory);
+	// // System.out.println(registers.getRegister(0).getValue());
+	// reader.close();
+	// } catch (IOException e) {
+	// e.printStackTrace();
+	// }
+	// while (instructionMemory.getInstruction(Integer.parseInt(registers
+	// .getRegister(0).getValue(), 2)) != null) {
+	//
+	// // Fetch
+	// Fetch fetch = new Fetch(Integer.parseInt(registers.getRegister(0)
+	// .getValue(), 2), instructionMemory);
+	// String instruction = fetch.instruction;
+	// System.out.println("Instruction: " + instruction + " is fetched");
+	// // add PC path here
+	//
+	// // Decode
+	// Decode registersBlock = new Decode(instruction, "", registers);
+	// String ReadData1 = registersBlock.ReadData[0];
+	// String ReadData2 = registersBlock.ReadData[1];
+	// System.out.println("Instruction: " + instruction + " is Decoded");
+	// // System.out.println(registers);
+	// // System.out.println(fetch.instruction);
+	// // System.out.println(registers.getRegister(0).getValue());
+	// if (instruction.substring(0, 4).equals("0100")
+	// || instruction.substring(0, 4).equals("0101"))
+	// control.LS.setValue("1");
+	//
+	//
+	// // Execute
+	// String SignExtendInput = instruction.substring(8, 16);
+	// String SignExtendOutPut = SignExtend(SignExtendInput);
+	// if (instruction.substring(0, 4).equals("0111"))
+	// control.ALUSrc.setValue("1");
+	// String ALUSrc = control.ALUSrc.getValue();
+	// String ALUSrcMux = mux(ReadData2, SignExtendOutPut, ALUSrc);
+	// String SignExtendOutPut2 = SignExtend(instruction.substring(12, 16));
+	// String LSMux = mux(ReadData1, SignExtendOutPut2,
+	// control.LS.getValue());
+	// Execute execute = new Execute(instruction, LSMux, ALUSrcMux,
+	// control);
+	// System.out.println("Instruction: " + instruction + " is Executed");
+	// // System.out.println("ALU Result: " + execute.executeResult +
+	// // " Zero: "
+	// // + execute.zero + " Lessthan: " + execute.lessThan);
+	//
+	//
+	// // Setting PC
+	// String pc = pc(registers, control, execute.zero, execute.lessThan,
+	// instruction, ReadData1);
+	// registers.registers[0].setValue(pc);
+	//
+	// // Memory
+	// Memory memory = new Memory(execute.executeResult, ReadData2,
+	// control);
+	// System.out.println("Instruction: " + instruction + " is Memorized");
+	//
+	// if (instruction.substring(0, 4).equals("0100"))
+	// control.MemToReg.setValue("1");
+	//
+	// // WriteBack
+	// String WriteRegister = instruction.substring(4, 8);
+	// WriteBack writeBack = new WriteBack(control, memory.readData,
+	// execute.executeResult, pcc, WriteRegister, registers);
+	// System.out.println("Instruction: " + instruction
+	// + " is WrittenBack");
+	//
+	// // print instruction and registers info after finishing its 5 stages
+	// System.out.println(registers);
+	// clearControl(control);
+	// }
+	// }
 
-		Registers registers = new Registers();
-		InstructionMemory instructionMemory = new InstructionMemory(2500);
-		Control control = new Control();
-
-		// ////////////////////////JUST TO TEST///////////////////
-		// registers.registers[3].setValue("0000000000000100");
-		// registers.registers[4].setValue("0000000000000100");
-
-		// ///////////////////////////////////////////////////////
-		// Getting all instructions from txt file in Instruction Memory
-		BufferedReader reader;
-		try {
-
-			reader = new BufferedReader(new FileReader("src/instructions.txt"));
-			String line = reader.readLine();
-			int index = Integer
-					.parseInt(registers.getRegister(0).getValue(), 2);
-			while (line != null) {
-				instructionMemory.setInstruction(index, line);
-				index += 2;
-				// read next line
-				line = reader.readLine();
-			}
-			// System.out.println(instructionMemory);
-			// System.out.println(registers.getRegister(0).getValue());
-			reader.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public static void run(InstructionMemory instructionMemory,Control control,Registers registers) {
 		while (instructionMemory.getInstruction(Integer.parseInt(registers
 				.getRegister(0).getValue(), 2)) != null) {
 			

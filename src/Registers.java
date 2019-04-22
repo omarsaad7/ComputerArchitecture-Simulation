@@ -23,36 +23,28 @@ public class Registers {
 		registers[15] = new Register("#Sp", 16);
 	}
 
-	/**
-	 * Read the register at the specified index
-	 * 
-	 * @param index
-	 *            the index of the register to be read
-	 * @return the register at the given index
-	 */
+	
 	public Register getRegister(int index) {
 		return registers[index];
 	}
 
-	/**
-	 * Write the passed value to the register at the specified index
-	 * 
-	 * @param index
-	 *            the index of the register to write at
-	 * @param value
-	 *            the value to be written
-	 */
+	
 	public void writeRegister(int index, String value) {
 		registers[index].setValue(value);
 	}
 
-	/**
-	 * Returns a string representation of the register file
-	 */
+//	"<html>Hello World!<br/>blahblahblah</html>"
 	public String toString() {
 		String r = "";
 		for (int i = 0; i < 16; ++i)
 			r += registers[i].toString() + '\n';
+		return r;
+	}
+	public String showonGUI() {
+		String r = "<html>";
+		for (int i = 0; i < 16; ++i)
+			r += registers[i].toString()+"<br/>" ;
+		r=r+"</html>";
 		return r;
 	}
 
