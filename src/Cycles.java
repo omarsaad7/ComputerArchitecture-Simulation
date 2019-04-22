@@ -17,8 +17,8 @@ public class Cycles {
 		Control control = new Control();
 
 		// ////////////////////////JUST TO TEST///////////////////
-		 registers.registers[3].setValue("0000000000001100");
-		 registers.registers[4].setValue("0000000000001000");
+//		 registers.registers[3].setValue("0000000000000100");
+//		 registers.registers[4].setValue("0000000000001000");
 
 		// ///////////////////////////////////////////////////////
 		// Getting all instructions from txt file in Instruction Memory
@@ -72,8 +72,8 @@ public class Cycles {
 		String LSMux = mux(ReadData1, SignExtendOutPut2, control.LS.getValue());
 		Execute execute = new Execute(instruction, LSMux, ALUSrcMux, control);
 		System.out.println("Instruction: " + instruction + " is Executed");
-		System.out.println("ALU Result: " + execute.executeResult + " Zero: "
-				+ execute.zero + " Lessthan: " + execute.lessThan);
+//		System.out.println("ALU Result: " + execute.executeResult + " Zero: "
+//				+ execute.zero + " Lessthan: " + execute.lessThan);
 
 		// Setting PC
 		String pc = pc(registers, control, execute.zero, execute.lessThan,
@@ -107,7 +107,7 @@ public class Cycles {
 		String pcc2 = Integer.toBinaryString(pc2);
 		String skipControl = skipcontrol(control, zero, lessthan);
 		String skipMux = mux(pcc, pcc2, skipControl);
-		String ins = instruction.substring(0, 12);
+		String ins = instruction.substring(4, 16);
 		int inst = Integer.parseInt(ins, 2);
 		inst = inst * 2;
 		String instr = Integer.toBinaryString(inst);
@@ -115,11 +115,11 @@ public class Cycles {
 			instr = "0" + instr;
 		while (pcc.length() < 16)
 			pcc = "0" + pcc;
-		instr = pcc.substring(13, 16) + instr;
+		
+		instr = pcc.substring(0, 3) + instr;
 		String jumpmux = mux(skipMux, instr, control.jump.getValue());
 		String jumpreturnmux = mux(jumpmux, ReadData1,
 				control.jumpReturn.getValue());
-		System.out.println(ReadData1 );
 		while (jumpreturnmux.length() < 16)
 			jumpreturnmux = "0" + jumpreturnmux;
 		return jumpreturnmux;
