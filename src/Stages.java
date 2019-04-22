@@ -7,8 +7,9 @@ import java.io.IOException;
 //String NewPC = Integer.toBinaryString(newPC);
 //registers.getRegister(0).setValue(binaryto16(NewPC));
 
-public class Cycles {
+public class Stages {
 	static String pcc;
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
@@ -17,8 +18,8 @@ public class Cycles {
 		Control control = new Control();
 
 		// ////////////////////////JUST TO TEST///////////////////
-//		 registers.registers[3].setValue("0000000000000100");
-//		 registers.registers[4].setValue("0000000000001000");
+		// registers.registers[3].setValue("0000000000000100");
+		// registers.registers[4].setValue("0000000000000100");
 
 		// ///////////////////////////////////////////////////////
 		// Getting all instructions from txt file in Instruction Memory
@@ -41,61 +42,87 @@ public class Cycles {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		// Fetch
-		Fetch fetch = new Fetch(Integer.parseInt(registers.getRegister(0)
-				.getValue(), 2), instructionMemory);
-		String instruction = fetch.instruction;
-		System.out.println("Instruction: " + instruction + " is fetched");
-		// add PC path here
-
-		// Decode
-		Decode registersBlock = new Decode(instruction, "", registers);
-		String ReadData1 = registersBlock.ReadData[0];
-		String ReadData2 = registersBlock.ReadData[1];
-		System.out.println("Instruction: " + instruction + " is Decoded");
-		// System.out.println(registers);
-		// System.out.println(fetch.instruction);
-		// System.out.println(registers.getRegister(0).getValue());
-		if (instruction.substring(0, 4).equals("0100")
-				|| instruction.substring(0, 4).equals("0101"))
-			control.LS.setValue("1");
-
-		// Execute
-		String SignExtendInput = instruction.substring(8, 16);
-		String SignExtendOutPut = SignExtend(SignExtendInput);
-		if (instruction.substring(0, 4).equals("0111"))
-			control.ALUSrc.setValue("1");
-		String ALUSrc = control.ALUSrc.getValue();
-		String ALUSrcMux = mux(ReadData2, SignExtendOutPut, ALUSrc);
-		String SignExtendOutPut2 = SignExtend(instruction.substring(12, 16));
-		String LSMux = mux(ReadData1, SignExtendOutPut2, control.LS.getValue());
-		Execute execute = new Execute(instruction, LSMux, ALUSrcMux, control);
-		System.out.println("Instruction: " + instruction + " is Executed");
-//		System.out.println("ALU Result: " + execute.executeResult + " Zero: "
-//				+ execute.zero + " Lessthan: " + execute.lessThan);
-
-		// Setting PC
-		String pc = pc(registers, control, execute.zero, execute.lessThan,
-				instruction, ReadData1);
-		registers.registers[0].setValue(pc);
-
-		// Memory
-		Memory memory = new Memory(execute.executeResult, ReadData2, control);
-		System.out.println("Instruction: " + instruction + " is Memorized");
-		
-		
-		if(instruction.substring(0, 4).equals("0100"))
-			control.MemToReg.setValue("1");
+		while (instructionMemory.getInstruction(Integer.parseInt(registers
+				.getRegister(0).getValue(), 2)) != null) {
 			
+			// Fetch
+			Fetch fetch = new Fetch(Integer.parseInt(registers.getRegister(0)
+					.getValue(), 2), instructionMemory);
+			String instruction = fetch.instruction;
+			System.out.println("Instruction: " + instruction + " is fetched");
+			// add PC path here
 		
-		
-		//WriteBack
-		String WriteRegister=instruction.substring(4, 8);
-		WriteBack writeBack = new WriteBack(control, memory.readData, execute.executeResult,pcc , WriteRegister, registers);
-		System.out.println("Instruction: " + instruction + " is WrittenBack");
-		//print instruction and registers info after finishing its 5 stages 
-		 System.out.println(registers);
+			// Decode
+			Decode registersBlock = new Decode(instruction, "", registers);
+			String ReadData1 = registersBlock.ReadData[0];
+			String ReadData2 = registersBlock.ReadData[1];
+			System.out.println("Instruction: " + instruction + " is Decoded");
+			// System.out.println(registers);
+			// System.out.println(fetch.instruction);
+			// System.out.println(registers.getRegister(0).getValue());
+			if (instruction.substring(0, 4).equals("0100")
+					|| instruction.substring(0, 4).equals("0101"))
+				control.LS.setValue("1");
+			
+			
+			// Execute
+			String SignExtendInput = instruction.substring(8, 16);
+			String SignExtendOutPut = SignExtend(SignExtendInput);
+			if (instruction.substring(0, 4).equals("0111"))
+				control.ALUSrc.setValue("1");
+			String ALUSrc = control.ALUSrc.getValue();
+			String ALUSrcMux = mux(ReadData2, SignExtendOutPut, ALUSrc);
+			String SignExtendOutPut2 = SignExtend(instruction.substring(12, 16));
+			String LSMux = mux(ReadData1, SignExtendOutPut2,
+					control.LS.getValue());
+			Execute execute = new Execute(instruction, LSMux, ALUSrcMux,
+					control);
+			System.out.println("Instruction: " + instruction + " is Executed");
+			// System.out.println("ALU Result: " + execute.executeResult +
+			// " Zero: "
+			// + execute.zero + " Lessthan: " + execute.lessThan);
+			
+	
+			// Setting PC
+			String pc = pc(registers, control, execute.zero, execute.lessThan,
+					instruction, ReadData1);
+			registers.registers[0].setValue(pc);
+			
+			// Memory
+			Memory memory = new Memory(execute.executeResult, ReadData2,
+					control);
+			System.out.println("Instruction: " + instruction + " is Memorized");
+
+			if (instruction.substring(0, 4).equals("0100"))
+				control.MemToReg.setValue("1");
+
+			// WriteBack
+			String WriteRegister = instruction.substring(4, 8);
+			WriteBack writeBack = new WriteBack(control, memory.readData,
+					execute.executeResult, pcc, WriteRegister, registers);
+			System.out.println("Instruction: " + instruction
+					+ " is WrittenBack");
+
+			// print instruction and registers info after finishing its 5 stages
+			System.out.println(registers);
+			clearControl(control);
+		}
+	}
+
+	public static void clearControl(Control control) {
+		control.ALUOp.setValue("0000");
+		control.ALUSrc.setValue("0");
+		control.jal.setValue("0");
+		control.jump.setValue("0");
+		control.jumpReturn.setValue("0");
+		control.LS.setValue("0");
+		control.MemRead.setValue("0");
+		control.MemToReg.setValue("0");
+		control.MemWrite.setValue("0");
+		control.RegWrite.setValue("0");
+		control.SkipEqual.setValue("0");
+		control.SkipLessThan.setValue("0");
+		control.SkipNotEqual.setValue("0");
 	}
 
 	public static String pc(Registers registers, Control control, boolean zero,
@@ -115,7 +142,7 @@ public class Cycles {
 			instr = "0" + instr;
 		while (pcc.length() < 16)
 			pcc = "0" + pcc;
-		
+
 		instr = pcc.substring(0, 3) + instr;
 		String jumpmux = mux(skipMux, instr, control.jump.getValue());
 		String jumpreturnmux = mux(jumpmux, ReadData1,
@@ -139,7 +166,7 @@ public class Cycles {
 			output = "1";
 		if (lessthan && skiplessthan.equals("1"))
 			output = "1";
-		
+
 		return output;
 	}
 
